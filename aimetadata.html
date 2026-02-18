@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <!-- primary meta tags -->
+    <title>AI MetaForge · SEO metadata generator</title>
+    <meta name="description" content="Generate SEO-optimized meta titles, descriptions & keywords with AI. Copy to clipboard, CSV export, dark glassmorphism UI.">
+    <meta name="keywords" content="metadata generator, seo tool, ai meta tags, title description keywords, csv export">
+    <meta name="author" content="MetaForge AI">
+    <!-- open graph / social -->
+    <meta property="og:title" content="AI MetaForge · smart metadata generator">
+    <meta property="og:description" content="Generate perfect meta tags in seconds. Character limits, copy & CSV.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://metagen.example">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- favicon (emoji fallback) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <!-- fonts & icons (inter + material symbols) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            background: #0b0d15;
+            color: #eef2fb;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        /* glassmorphism base + gradient glow */
+        .glass-card {
+            background: rgba(20, 25, 40, 0.65);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(140, 130, 250, 0.15);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(120, 100, 255, 0.1) inset, 0 0 30px -8px #8a6de9;
+            transition: all 0.2s ease;
+        }
+        .glass-card:hover {
+            box-shadow: 0 24px 48px -12px #140e2b, 0 0 0 1px #a688ff4d inset, 0 0 32px -4px #b37df2;
+            border-color: rgba(160, 140, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* gradient text */
+        .gradient-text {
+            background: linear-gradient(115deg, #cbb7ff, #93c5fd, #7ee7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 1.8rem;
+        }
+
+        /* ad placeholders (easy ad unit style) */
+        .adspace {
+            background: rgba(10, 15, 25, 0.7);
+            border: 1px dashed #5f6ca0;
+            border-radius: 24px;
+            backdrop-filter: blur(6px);
+            padding: 1.2rem 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #a0afdf;
+            letter-spacing: 0.3px;
+            box-shadow: 0 0 12px #443d8a40;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .adspace:hover {
+            background: rgba(30, 35, 60, 0.8);
+            border-color: #b39aff;
+        }
+        .adlabel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+        .adlabel span {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .ad-note {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            margin-top: 0.2rem;
+        }
+
+        /* hero */
+        .hero {
+            text-align: center;
+            padding: 3.2rem 1rem 2.8rem;
+        }
+        .hero .badge {
+            background: #2d2655;
+            border-radius: 60px;
+            padding: 0.3rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            display: inline-block;
+            border: 1px solid #8875dd;
+            color: #dbd0ff;
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            max-width: 900px;
+            margin: 0.5rem auto;
+        }
+        .hero-sub {
+            font-size: 1.3rem;
+            color: #b4c2e3;
+            max-width: 620px;
+            margin: 1.2rem auto 2rem;
+        }
+
+        /* tool interface */
+        .tool-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2.5rem 0 3rem;
+        }
+        .input-area {
+            flex: 1.2;
+            min-width: 300px;
+        }
+        .output-area {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .field {
+            margin-bottom: 1.8rem;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+            color: #cddcff;
+        }
+        label span.material-symbols-outlined {
+            font-size: 1.4rem;
+            color: #ad9aff;
+        }
+        input, textarea {
+            width: 100%;
+            background: rgba(8, 10, 20, 0.7);
+            border: 1.5px solid #2d3450;
+            border-radius: 28px;
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: #f0f4ff;
+            outline: none;
+            transition: 0.2s;
+            backdrop-filter: blur(6px);
+            resize: vertical;
+        }
+        textarea {
+            border-radius: 28px;
+            min-height: 100px;
+        }
+        input:focus, textarea:focus {
+            border-color: #b28aff;
+            box-shadow: 0 0 18px #906eff66, 0 0 0 1px #c2abff inset;
+        }
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            color: #95a6d1;
+        }
+        .char-limit-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin: 0.8rem 0 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.8rem 1.4rem;
+            border-radius: 48px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #373b5b;
+        }
+        .limit-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .limit-item span {
+            background: #1e2340;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #c7b3ff;
+        }
+
+        .output-card {
+            background: rgba(16, 18, 30, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 1.4rem 1.6rem;
+            border: 1px solid #353b60;
+            box-shadow: 0 12px 28px -10px #00000080;
+        }
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .output-header h3 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .copy-btn {
+            background: rgba(80, 70, 160, 0.5);
+            border: none;
+            color: white;
+            padding: 0.3rem 1rem 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #7378b0;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .copy-btn:hover {
+            background: #5b4fb0;
+            border-color: #bfb2ff;
+            box-shadow: 0 0 15px #886eff;
+        }
+        .meta-preview {
+            background: #0c0f1c;
+            border-radius: 22px;
+            padding: 1rem 1.3rem;
+            border-left: 4px solid #aa92ff;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 5rem 0 3rem;
+        }
+        .feature-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin: 2rem 0 3rem;
+        }
+        @media (max-width: 700px) {
+            .faq-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 3rem; }
+        }
+        details {
+            background: #171d30b3;
+            border-radius: 32px;
+            padding: 1.3rem 1.8rem;
+            border: 1px solid #404675;
+            backdrop-filter: blur(4px);
+        }
+        summary {
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #d2ddff;
+        }
+        summary::-webkit-details-marker { color: #b29eff; }
+
+        .button-primary {
+            background: linear-gradient(135deg, #5f45bb, #3b71ca, #398da8);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            box-shadow: 0 12px 30px -10px #6d4ed0;
+            border: 1px solid #bdb3ff;
+            cursor: pointer;
+            transition: 0.15s;
+            width: fit-content;
+        }
+        .button-secondary {
+            background: rgba(30, 35, 60, 0.8);
+            border: 1px solid #5e6aac;
+            border-radius: 40px;
+            padding: 0.8rem 2rem;
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+        }
+        .csv-export-area {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0 1rem;
+        }
+        .footer-meta {
+            text-align: center;
+            padding: 2.5rem 0 1rem;
+            border-top: 1px solid #303759;
+        }
+        /* adsense placeholder style (just IDs) */
+        .adsense-id {
+            font-family: monospace;
+            background: #1e233b;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            color: #ccd9ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- top banner ad placement -->
+    <div class="container" style="padding-top: 0.8rem;">
+        <div class="adspace" id="ad-top-banner" title="AdSense unit (top banner)">
+            <div class="adlabel">
+                <span class="material-symbols-outlined">ads_click</span> 
+                <span>Top banner · Google AdSense</span>
+                <span class="adsense-id">ca-pub-XXXXXXXXXXXXXXXX</span>
+            </div>
+            <div class="ad-note">replace with your ad unit ID (responsive)</div>
+        </div>
+    </div>
+
+    <!-- hero section -->
+    <section class="hero container">
+        <div class="badge">⚡ powered by AI · metadata 3.0</div>
+        <h1 class="gradient-text">generate perfect meta<br>in one flash</h1>
+        <p class="hero-sub">AI‑infused title, description & keywords — character‑aware, copy & CSV.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <span class="glass-card" style="padding: 0.5rem 1.5rem;">✨ 100 title</span>
+            <span class="glass-card" style="padding: 0.5rem 1.5rem;">📄 200 description</span>
+            <span class="glass-card" style="padding: 0.5rem 1.5rem;">🔑 40 keywords (unique)</span>
+        </div>
+    </section>
+
+    <!-- main tool interface -->
+    <div class="container">
+        <!-- sidebar + tool row (sidebar ad on the right) -->
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <!-- main tool (left) -->
+            <div style="flex: 3; min-width: 300px;">
+                <div class="glass-card tool-panel" style="padding: 2rem;">
+                    <div class="input-area">
+                        <div class="field">
+                            <label><span class="material-symbols-outlined">title</span> Meta title</label>
+                            <input type="text" id="titleInput" placeholder="e.g. AI Meta Generator · Smart SEO" value="AI MetaForge · Smart metadata">
+                            <div class="char-counter"><span id="titleCount">34</span> / 100</div>
+                        </div>
+                        <div class="field">
+                            <label><span class="material-symbols-outlined">description</span> Meta description</label>
+                            <textarea id="descInput" rows="3">Generate SEO-optimized meta titles, descriptions & keywords with AI. Copy, CSV export, dark glassmorphism.</textarea>
+                            <div class="char-counter"><span id="descCount">112</span> / 200</div>
+                        </div>
+                        <div class="field">
+                            <label><span class="material-symbols-outlined">keyword</span> Keywords (comma separated)</label>
+                            <input type="text" id="keywordInput" value="metadata generator, seo tool, ai meta, csv export, dark theme">
+                            <div class="char-counter"><span id="keywordCount">57</span> chars (unique limit 40)</div>
+                        </div>
+                        <div class="char-limit-options">
+                            <div class="limit-item"><span>title ≤100</span> ✓ active</div>
+                            <div class="limit-item"><span>desc ≤200</span> ✓</div>
+                            <div class="limit-item"><span>keywords ≤40 (no repeats)</span> ⚡</div>
+                        </div>
+                        <button class="button-primary" id="generateBtn" style="margin-top: 0.5rem;">
+                            <span class="material-symbols-outlined" style="vertical-align: middle;">auto_awesome</span> Generate metadata
+                        </button>
+                    </div>
+
+                    <!-- output area (right inside tool) -->
+                    <div class="output-area">
+                        <div class="output-card">
+                            <div class="output-header">
+                                <h3><span class="material-symbols-outlined" style="color:#bc9eff;">token</span> Generated title</h3>
+                                <button class="copy-btn" id="copyTitleBtn"><span class="material-symbols-outlined">content_copy</span> copy</button>
+                            </div>
+                            <div class="meta-preview" id="previewTitle">AI MetaForge · Smart metadata</div>
+                        </div>
+                        <div class="output-card">
+                            <div class="output-header">
+                                <h3><span class="material-symbols-outlined">sticky_note</span> Description</h3>
+                                <button class="copy-btn" id="copyDescBtn"><span class="material-symbols-outlined">content_copy</span> copy</button>
+                            </div>
+                            <div class="meta-preview" id="previewDesc">Generate SEO-optimized meta titles, descriptions & keywords with AI. Copy, CSV export, dark glassmorphism.</div>
+                        </div>
+                        <div class="output-card">
+                            <div class="output-header">
+                                <h3><span class="material-symbols-outlined">sell</span> Keywords</h3>
+                                <button class="copy-btn" id="copyKeywordBtn"><span class="material-symbols-outlined">content_copy</span> copy</button>
+                            </div>
+                            <div class="meta-preview" id="previewKeywords">metadata generator, seo tool, ai meta, csv export, dark theme</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSV export + features hint -->
+                <div class="csv-export-area">
+                    <button class="button-secondary" id="exportCsvBtn"><span class="material-symbols-outlined">download</span> Export as CSV (meta pack)</button>
+                    <span style="margin-left: auto; align-self:center">✨ SEO optimized · fast generation · CSV support</span>
+                </div>
+            </div>
+
+            <!-- sidebar ad placement (right rail) -->
+            <div style="flex: 0.8; min-width: 180px;">
+                <div class="glass-card adspace" style="padding: 2rem 1rem; position: sticky; top: 1rem;" id="ad-sidebar">
+                    <div class="adlabel">
+                        <span class="material-symbols-outlined">square</span> Sidebar ad
+                    </div>
+                    <div style="margin: 1rem 0;">📢 300x600</div>
+                    <div class="adsense-id">ca-pub-YYYYYYYYYYYY</div>
+                    <div class="ad-note">AdSense unit ID ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- features section (cards) -->
+    <section class="container">
+        <div class="feature-grid">
+            <div class="glass-card feature-card"><span class="material-symbols-outlined" style="font-size:2.8rem;color:#ad9aff;">seo</span><h3>SEO optimized</h3><p>exact character limits for search engines</p></div>
+            <div class="glass-card feature-card"><span class="material-symbols-outlined" style="font-size:2.8rem;color:#9ac7ff;">bolt</span><h3>fast generation</h3><p>real-time AI preview (no wait)</p></div>
+            <div class="glass-card feature-card"><span class="material-symbols-outlined" style="font-size:2.8rem;color:#90e0ff;">csv</span><h3>CSV export</h3><p>one‑click meta pack download</p></div>
+        </div>
+    </section>
+
+    <!-- FAQ section -->
+    <section class="container">
+        <h2 class="gradient-text" style="font-size:2.5rem; margin-bottom:1rem;">❓ smart FAQ</h2>
+        <div class="faq-grid">
+            <details class="glass-card" style="padding: 1.5rem;">
+                <summary>How does AI generate metadata?</summary>
+                <p style="margin-top:0.8rem;">We optimize your input to fit length rules, remove duplicate keywords, and suggest clean variants — all in real time.</p>
+            </details>
+            <details class="glass-card" style="padding: 1.5rem;">
+                <summary>What are the character limits?</summary>
+                <p>Title max 100, description max 200, keywords max 40 characters (non‑repeated words filtered).</p>
+            </details>
+            <details class="glass-card" style="padding: 1.5rem;">
+                <summary>Can I copy each field?</summary>
+                <p>Yes, each output card has its own copy button. Also CSV includes all three.</p>
+            </details>
+            <details class="glass-card" style="padding: 1.5rem;">
+                <summary>How do I add AdSense?</summary>
+                <p>Replace the placeholder IDs (ca-pub-XXXXXXXXXXXXXXXX) in ad divs with your own. Units will auto-size.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- bottom ad placement (below result) -->
+    <div class="container">
+        <div class="adspace" id="ad-bottom">
+            <div class="adlabel">
+                <span class="material-symbols-outlined">ad</span> Below result · AdSense
+                <span class="adsense-id">ca-pub-ZZZZZZZZZZZZ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer class="footer-meta container">
+        <p style="opacity:0.7;">AI-powered metadata generator · modern dark theme with glassmorphism · all limits dynamic</p>
+    </footer>
+
+    <script>
+        (function() {
+            // DOM elements
+            const titleInp = document.getElementById('titleInput');
+            const descInp = document.getElementById('descInput');
+            const keywordInp = document.getElementById('keywordInput');
+            const titleCnt = document.getElementById('titleCount');
+            const descCnt = document.getElementById('descCount');
+            const keywordCnt = document.getElementById('keywordCount');
+            const previewTitle = document.getElementById('previewTitle');
+            const previewDesc = document.getElementById('previewDesc');
+            const previewKeywords = document.getElementById('previewKeywords');
+            const generateBtn = document.getElementById('generateBtn');
+
+            // copy buttons
+            const copyTitle = document.getElementById('copyTitleBtn');
+            const copyDesc = document.getElementById('copyDescBtn');
+            const copyKeyword = document.getElementById('copyKeywordBtn');
+            const exportCsv = document.getElementById('exportCsvBtn');
+
+            // helper: update counters & previews (with limit rules)
+            function updateAll() {
+                // title
+                let title = titleInp.value || "";
+                if (title.length > 100) title = title.slice(0,100);
+                titleCnt.textContent = title.length;
+
+                // description
+                let desc = descInp.value || "";
+                if (desc.length > 200) desc = desc.slice(0,200);
+                descCnt.textContent = desc.length;
+
+                // keywords (unique & ≤40 chars total after dedupe)
+                let rawKeywords = keywordInp.value || "";
+                // split by comma, trim, filter empty, remove duplicates (case-insensitive)
+                let kwArray = rawKeywords.split(',').map(k => k.trim()).filter(k => k.length > 0);
+                // remove duplicates (case-insensitive)
+                const seen = new Set();
+                kwArray = kwArray.filter(k => {
+                    const lower = k.toLowerCase();
+                    if (seen.has(lower)) return false;
+                    seen.add(lower);
+                    return true;
+                });
+                let dedupedStr = kwArray.join(', ');
+                // now enforce 40 chars limit on the string (not per keyword)
+                if (dedupedStr.length > 40) {
+                    // we truncate the whole string but try to keep last comma valid – simple slice
+                    dedupedStr = dedupedStr.slice(0, 40);
+                    // avoid trailing comma – we can optionally fix but okay for demo
+                }
+                // update field only if changed? we'll just show char count from original but preview uses limited
+                keywordCnt.textContent = dedupedStr.length + ' (unique)';
+                // update preview
+                previewTitle.textContent = title || "—";
+                previewDesc.textContent = desc || "—";
+                previewKeywords.textContent = dedupedStr || "—";
+
+                // sync input fields with truncated values (optional, but good)
+                if (titleInp.value.length > 100) titleInp.value = title;
+                if (descInp.value.length > 200) descInp.value = desc;
+                // for keywords, we silently update the input to deduped version? we can do that on generate or blur
+                // we'll do it on generate click for better UX
+            }
+
+            // generate button does dedupe & limits (and syncs keyword input with cleaned version)
+            function generateAndSync() {
+                // title trim
+                let title = titleInp.value || "";
+                if (title.length > 100) title = title.slice(0,100);
+                titleInp.value = title;
+
+                let desc = descInp.value || "";
+                if (desc.length > 200) desc = desc.slice(0,200);
+                descInp.value = desc;
+
+                // keywords: dedupe and limit to 40 chars
+                let raw = keywordInp.value || "";
+                let arr = raw.split(',').map(k => k.trim()).filter(k => k.length);
+                const unique = [];
+                const seenMap = new Map();
+                for (let kw of arr) {
+                    let lower = kw.toLowerCase();
+                    if (!seenMap.has(lower)) {
+                        seenMap.set(lower, true);
+                        unique.push(kw);
+                    }
+                }
+                let cleanStr = unique.join(', ');
+                if (cleanStr.length > 40) cleanStr = cleanStr.slice(0, 40).replace(/, $/, ''); // remove trailing comma if needed
+                keywordInp.value = cleanStr;
+
+                updateAll();
+            }
+
+            // event listeners
+            titleInp.addEventListener('input', updateAll);
+            descInp.addEventListener('input', updateAll);
+            keywordInp.addEventListener('input', function(e) {
+                // just update counter without full dedupe (preview will reflect later)
+                let raw = keywordInp.value;
+                let arr = raw.split(',').map(k => k.trim()).filter(k => k.length);
+                const seen = new Set();
+                arr = arr.filter(k => { let low = k.toLowerCase(); if(seen.has(low)) return false; seen.add(low); return true; });
+                let displayStr = arr.join(', ');
+                if (displayStr.length > 40) displayStr = displayStr.slice(0,40);
+                keywordCnt.textContent = displayStr.length + ' (unique preview)';
+                previewKeywords.textContent = displayStr || "—";
+                // but we don't want to force input change here for smoothness. preview shows limited
+            });
+            generateBtn.addEventListener('click', generateAndSync);
+
+            // copy handlers
+            copyTitle.addEventListener('click', ()=>{
+                navigator.clipboard.writeText(previewTitle.textContent).then(()=> alert('Title copied!'));
+            });
+            copyDesc.addEventListener('click', ()=>{
+                navigator.clipboard.writeText(previewDesc.textContent).then(()=> alert('Description copied!'));
+            });
+            copyKeyword.addEventListener('click', ()=>{
+                navigator.clipboard.writeText(previewKeywords.textContent).then(()=> alert('Keywords copied!'));
+            });
+
+            // CSV export (title, description, keywords)
+            exportCsv.addEventListener('click', ()=>{
+                // ensure latest preview values
+                generateAndSync(); 
+                const title = previewTitle.textContent;
+                const desc = previewDesc.textContent;
+                const keywords = previewKeywords.textContent;
+                // simple CSV with headers
+                const csvContent = `"Title","Description","Keywords"\n"${title.replace(/"/g, '""')}","${desc.replace(/"/g, '""')}","${keywords.replace(/"/g, '""')}"`;
+                const blob = new Blob(["\uFEFF" + csvContent], {type: 'text/csv;charset=utf-8;'});
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'metadata_export.csv';
+                link.click();
+                URL.revokeObjectURL(link.href);
+            });
+
+            // initial update
+            updateAll();
+
+            // simulate AI uniqueness and limit enforcement for keyword on every blur
+            keywordInp.addEventListener('blur', ()=>{
+                let raw = keywordInp.value;
+                let arr = raw.split(',').map(k => k.trim()).filter(k => k.length);
+                const seen = new Set();
+                arr = arr.filter(k => { let low = k.toLowerCase(); if(seen.has(low)) return false; seen.add(low); return true; });
+                let clean = arr.join(', ');
+                if (clean.length > 40) clean = clean.slice(0, 40).replace(/,? $/, '');
+                keywordInp.value = clean;
+                updateAll();
+            });
+        })();
+    </script>
+
+    <!-- dummy google adsense integration hint (IDs placed) -->
+    <!-- Ad unit IDs are visible in ad sections: replace ca-pub-* with real client. -->
+</body>
+</html>
